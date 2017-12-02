@@ -28,11 +28,11 @@ object Main extends App {
   /* process */
   val tools = new Tools(V, E, edges.clone, Vemb, Eemb, edgesEmb.clone)
 
-  val answerArray = new Array[Long](V+1)
+  val answerArray = Array.fill[List[Int]](V+1)(Nil)
   val (side, sideEmb) = (tools.side, tools.sideEmb)
   for (i <- 1 to V) {
     val vol = if (i % side == 0) side else i % side
-    answerArray(i) = ((i-1) / side) * sideEmb + vol
+    answerArray(i) = ((i-1) / side) * sideEmb + vol :: answerArray(i)
   }
 
   val answer: Answer = Answer(V, Vemb, sideEmb).fromArray(answerArray)
@@ -61,10 +61,10 @@ object MainFuncs {
     import java.io._
 
     val pw = new PrintWriter(System.out)
-    val answerArray = answer.toArray
+    val answerArray: Array[List[Int]] = answer.toArray
 
     for (i <- 1 to V) {
-      pw.println(s"1 ${answerArray(i)}")
+      pw.println(s"1 ${answerArray(i).mkString(" ")}")
     }
     pw.flush()
     pw.close()
