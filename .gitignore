@@ -1,0 +1,9 @@
+# Scala
+*.class
+/src/Submit.scala
+
+# Contest
+/problem1_toolkit_JP/
+/scripts/
+*.in
+*.out
