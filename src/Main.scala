@@ -1,6 +1,7 @@
 import java.io._
 import java.util.StringTokenizer
 import CommonPackage._
+import ToolsPackage._
 
 object Main extends App {
   import MainFuncs._
@@ -41,19 +42,6 @@ object Main extends App {
   printer(answer, V)
 }
 
-class Tools(
-  val V: Int, val E: Int,
-  val edges: Array[List[Int]],
-  val Vemb: Int, val Eemb: Int,
-  val edgesEmb: Array[List[Int]]
-) {
-  import Math._
-
-  val side = sqrt(V).ceil.toInt  // 正方形に置く場合の一辺の長さ
-  val sideEmb = sqrt(Vemb).round.toInt
-
-  def checkScore(answer: Array[Long]) = ???
-}
 
 object MainFuncs {
   /* output */
