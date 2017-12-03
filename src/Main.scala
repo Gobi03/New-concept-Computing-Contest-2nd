@@ -1,6 +1,7 @@
 import java.io._
 import java.util.StringTokenizer
 import CommonPackage._
+import ResultPackage._
 import ToolsPackage._
 
 object Main extends App {
@@ -34,15 +35,9 @@ object Main extends App {
 
   // if empty, value become zero.
   // value means an element of original graph
-  val result = Array.ofDim[Int](sideEmb+1, sideEmb+1)
+  val result = new Result(side, sideEmb)
 
-  val answerArray = Array.fill[List[Int]](V+1)(Nil)
-  for (i <- 1 to V) {
-    val vol = if (i % side == 0) side else i % side
-    answerArray(i) = ((i-1) / side) * sideEmb + vol :: answerArray(i)
-  }
-
-  val answer: Answer = Answer(result, sideEmb).fromArray(answerArray)
+  val answer: Answer = Answer(result)
 
 
   /*** output ***/
@@ -63,6 +58,12 @@ object MainFuncs {
     }
     pw.flush()
     pw.close()
+  }
+
+  case class Answer(result: Result)(implicit infos: InputInfos) {
+    import infos._
+
+    def toArray: Array[List[Int]] = result.toListArray
   }
 }
 

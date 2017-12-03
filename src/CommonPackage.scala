@@ -8,6 +8,16 @@ object CommonPackage {
       new Point(this.x + p.x, this.y + p.y)
     def -(p: Point): Point =
       new Point(this.x - p.x, this.y - p.y)
+
+    def move8: List[Point] = {
+      var res: List[Point] = Nil
+      for (volx <- -1 to 1; voly <- -1 to 1) {
+        if ((x, y) != (0, 0))
+          res = Point(this.x + volx, this.y + voly) :: res
+      }
+      res
+    }
+
   }
 
   case class InputInfos(
@@ -17,38 +27,5 @@ object CommonPackage {
     val edgesEmb: Array[List[Int]]
   )
 
-  case class Answer(result: Array[Array[Int]], sideEmb: Int)(implicit infos: InputInfos) {
-    import infos._
-
-    def toArray: Array[List[Int]] = {
-      val res = Array.fill[List[Int]](V+1)(Nil)
-      for (y <- 1 to sideEmb; x <- 1 to sideEmb) {
-        if (result(y)(x) > 0) {
-          val kingsNode = (y-1)*sideEmb + x
-          res(result(y)(x)) = kingsNode :: res(result(y)(x))
-        }
-      }
-      res
-    }
-
-
-    // deprecated
-    def fromArray(ar: Array[List[Int]]): Answer = {
-      require(ar.length == V+1)
-
-      val res = Array.ofDim[Int](sideEmb+1, sideEmb+1)
-      for (i <- 1 to V) {
-        for (nodeEmb <- ar(i)) {
-          val y = if (nodeEmb % sideEmb == 0) nodeEmb/sideEmb
-                  else nodeEmb/sideEmb + 1
-          val x = if (nodeEmb % sideEmb == 0) sideEmb
-                  else nodeEmb % sideEmb
-          res(y)(x) = i
-        }
-      }
-
-      Answer(res, sideEmb)
-    }
-  }
 }
 
