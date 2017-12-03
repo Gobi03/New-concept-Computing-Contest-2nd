@@ -6,9 +6,9 @@ import ToolsPackage._
 object Main extends App {
   import MainFuncs._
 
+  /*** input ***/
   val in = new InputReader(System.in)
-
-  /* input */
+  
   val V, E = in.next().toInt
   val edges = Array.fill[List[Int]](V+1)(Nil)
   for (_ <- 1 to E) {
@@ -26,19 +26,26 @@ object Main extends App {
   }
 
 
-  /* process */
-  val tools = new Tools(V, E, edges.clone, Vemb, Eemb, edgesEmb.clone)
+  /*** process ***/
+  implicit val inputInfos =
+    InputInfos(V, E, edges.clone, Vemb, Eemb, edgesEmb.clone)
+  val tools = new Tools(inputInfos)
+  val (side, sideEmb) = (tools.side, tools.sideEmb)
+
+  // if empty, value become zero.
+  // value means an element of original graph
+  val result = Array.ofDim[Int](sideEmb+1, sideEmb+1)
 
   val answerArray = Array.fill[List[Int]](V+1)(Nil)
-  val (side, sideEmb) = (tools.side, tools.sideEmb)
   for (i <- 1 to V) {
     val vol = if (i % side == 0) side else i % side
     answerArray(i) = ((i-1) / side) * sideEmb + vol :: answerArray(i)
   }
 
-  val answer: Answer = Answer(V, Vemb, sideEmb).fromArray(answerArray)
+  val answer: Answer = Answer(result, sideEmb).fromArray(answerArray)
 
-  /* output */
+
+  /*** output ***/
   printer(answer, V)
 }
 
