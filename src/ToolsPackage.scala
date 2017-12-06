@@ -2,14 +2,21 @@ object ToolsPackage {
   import CommonPackage._
   import ResultPackage._
 
-  class Tools(infos: InputInfos) {
+  trait ToolsTrait {
+    val side: Int
+    val sideEmb: Int
+
+    def calcScore(result: Result): Long
+
+    def inField(pos: Point): Boolean
+  }
+
+  class Tools(infos: InputInfos) extends ToolsTrait {
     import Math._
     import infos._
 
     val side = sqrt(V).ceil.toInt  // 正方形に置く場合の一辺の長さ
     val sideEmb = sqrt(Vemb).round.toInt
-
-    def getNowTime: Long = System.currentTimeMillis
 
     def calcScore(result: Result): Long = {
 

@@ -5,6 +5,8 @@ import ResultPackage._
 import ToolsPackage._
 
 object Main extends App {
+  val startTime: Long = getNowTime
+
   import MainFuncs._
 
   /*** input ***/
