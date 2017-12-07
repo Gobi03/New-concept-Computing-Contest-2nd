@@ -1,5 +1,7 @@
 object CommonPackage {
 
+  def getNowTime: Long = System.currentTimeMillis
+
   case class Point(val x: Int, val y: Int) {
     def this(coord: (Int, Int)) = this(coord._1, coord._2)
     def toPair: (Int, Int) = (x, y)
