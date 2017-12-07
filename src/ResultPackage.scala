@@ -16,6 +16,8 @@ object ResultPackage {
 
     def calcScore(): Long
 
+    def copy: Result
+
   }
 
   class Result(initKings: Array[Array[Node]], side: Int, sideEmb: Int)
