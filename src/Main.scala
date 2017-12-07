@@ -37,7 +37,7 @@ object Main extends App {
 
   // if empty, value become zero.
   // value means an element of original graph
-  val result = new Result(side, sideEmb)
+  val result = new Result(mkInitialGraph(side, sideEmb), side, sideEmb)
 
   val answer: Answer = Answer(result)
 
@@ -60,6 +60,31 @@ object MainFuncs {
     }
     pw.flush()
     pw.close()
+  }
+
+  // make initialize Kings-Graph
+  def mkInitialGraph(side: Int, sideEmb: Int)  
+                    (implicit infos: InputInfos): Array[Array[Int]] = {
+    // deprecatedes
+
+    import infos._
+
+    val res = Array.ofDim[Int](sideEmb+1, sideEmb+1)
+
+    val answerArray = Array.fill[List[Int]](V+1)(Nil)
+    // make square-like answer
+    for (i <- 1 to V) {
+      val vol = if (i % side == 0) side else i % side
+      answerArray(i) = ((i-1) / side) * sideEmb + vol :: answerArray(i)
+    }
+    // apply answerArray to res
+    for (i <- 1 to V; now <- answerArray(i)) {
+      val y = if (now % sideEmb == 0) now/sideEmb else now/sideEmb + 1
+      val x = if (now % sideEmb == 0) sideEmb else now % sideEmb
+      res(y.toInt)(x.toInt) = i
+    }
+
+    res
   }
 
   case class Answer(result: Result)(implicit infos: InputInfos) {
