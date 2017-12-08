@@ -3,6 +3,7 @@ import java.util.StringTokenizer
 import CommonPackage._
 import ResultPackage._
 import ToolsPackage._
+import EvaluatorPackage._
 
 object Main extends App {
   val startTime: Long = getNowTime
@@ -37,7 +38,10 @@ object Main extends App {
 
   // if empty, value become zero.
   // value means an element of original graph
-  val result = new Result(mkInitialGraph(side, sideEmb), side, sideEmb)
+  val initResult = new Result(mkInitialGraph(side, sideEmb), side, sideEmb)
+
+  val evaluator = new Evaluator(side, sideEmb)
+  val result = evaluator.main(initResult, startTime)
 
   val answer: Answer = Answer(result)
 

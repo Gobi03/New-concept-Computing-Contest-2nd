@@ -11,6 +11,11 @@ object CommonPackage {
     def -(p: Point): Point =
       new Point(this.x - p.x, this.y - p.y)
 
+    def inField(sideEmb: Int): Boolean = {
+      this.x >= 1 && this.y >= 1 &&
+      this.x <= sideEmb && this.y <= sideEmb
+    }
+
     def move8: List[Point] = {
       var res: List[Point] = Nil
       for (volx <- -1 to 1; voly <- -1 to 1) {
