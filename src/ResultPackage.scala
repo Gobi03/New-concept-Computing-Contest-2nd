@@ -11,12 +11,17 @@ object ResultPackage {
 
     // 
     def get(pos: Point): Int
+    def set(pos: Point, node: Node): Unit
+    def getPositionsByNode(node: Int): List[Point]
     // get a node by Kings-Node number
     def getByKingsNode(nodeEmb: Int): Int
 
-    def calcScore(): Long
+    def getAroundNodes(pos: Point): List[Int]
 
     def copy: Result
+
+    def swap(node1: Node, node2: Node): Unit
+    def calcScore: Long
 
   }
 
@@ -29,9 +34,34 @@ object ResultPackage {
 
     def get(pos: Point): Node = elm(pos.y)(pos.x)
 
+    def set(pos: Point, node: Node): Unit = {
+      elm(pos.y)(pos.x) = node
+    }
+
+    def getPositionsByNode(node: Int): List[Point] = {
+      this.toListArray(node).map(kingsnodeToPos)
+    }
+
+    def swap(node1: Node, node2: Node): Unit = {
+      val posList1 = this.getPositionsByNode(node1)
+      val posList2 = this.getPositionsByNode(node2)
+
+      posList1.map(this.set(_, node2))
+      posList2.map(this.set(_, node1))
+    }
+
     def getByKingsNode(nodeEmb: Int): Node = {
       val pos: Point = this.kingsnodeToPos(nodeEmb)
       this.get(pos)
+    }
+
+    def getAroundNodes(pos: Point): List[Int] = {
+      for {
+        aroundPos <- pos.move8
+        if aroundPos.inField(sideEmb)
+        aroundNode = this.get(aroundPos)
+        if aroundNode > 0
+      } yield aroundNode
     }
 
     def toListArray: Array[List[KingsNode]] = {
@@ -45,7 +75,10 @@ object ResultPackage {
       res
     }
 
-    def calcScore(): Long = {
+    def copy: Result = new Result(elm.clone, side, sideEmb)
+
+
+    def calcScore: Long = {
 
       val Bonus = 100000L
       val init = 5000L     

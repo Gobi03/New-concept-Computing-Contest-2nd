@@ -8,4 +8,6 @@ fsc Entities.scala
 fsc ResultPackage.scala
 fsc ToolsPackage.scala
 
+fsc EvaluatorPackage.scala
+
 fsc Main.scala
