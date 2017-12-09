@@ -75,18 +75,22 @@ object MainFuncs {
 
     val res = Array.ofDim[Int](sideEmb+1, sideEmb+1)
 
-    val answerArray = Array.fill[List[Int]](V+1)(Nil)
-    // make square-like answer
+    val tornades: List[Point] = makeTornadePoints(side)
+    require(tornades.length == side * side)
+
+    type EdgesNum = Int
+    var list: List[(EdgesNum, Node)] = Nil
     for (i <- 1 to V) {
-      val vol = if (i % side == 0) side else i % side
-      answerArray(i) = ((i-1) / side) * sideEmb + vol :: answerArray(i)
+      list = (edges(i).length, i) :: list
     }
-    // apply answerArray to res
-    for (i <- 1 to V; now <- answerArray(i)) {
-      val y = if (now % sideEmb == 0) now/sideEmb else now/sideEmb + 1
-      val x = if (now % sideEmb == 0) sideEmb else now % sideEmb
-      res(y.toInt)(x.toInt) = i
-    }
+
+    tornades
+      .slice(tornades.length - V, tornades.length)
+      .zip(list.sorted)
+      .foreach {
+        case (pos, (_, node)) =>
+          res(pos.y)(pos.x) = node
+      }
 
     res
   }
