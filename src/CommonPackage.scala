@@ -2,6 +2,27 @@ object CommonPackage {
 
   def getNowTime: Long = System.currentTimeMillis
 
+  def makeTornadePoints(side: Int): List[Point] = {
+    def func(leftUp: Int, rightDown: Int, res: List[Point]): List[Point] = {
+      if (leftUp == rightDown) {
+        (Point(leftUp, rightDown) :: res).reverse
+      }
+      else if (leftUp > rightDown) {
+        res.reverse
+      }
+      else {
+        val next: List[Point] = (leftUp to rightDown-1).foldLeft(res){
+          (acc, i) => Point(i, leftUp) :: Point(rightDown, i) ::
+                      Point(i+1, rightDown) :: Point(leftUp, i+1) :: acc
+        }
+
+        func(leftUp+1, rightDown-1, next)
+      }
+    }
+
+    func(1, side, Nil)
+  }
+
   case class Point(val x: Int, val y: Int) {
     def this(coord: (Int, Int)) = this(coord._1, coord._2)
     def toPair: (Int, Int) = (x, y)
